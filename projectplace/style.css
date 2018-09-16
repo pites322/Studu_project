@@ -1,0 +1,36 @@
+.main-name {
+    position:absolute;
+    right: 50%;
+    top: 1%;
+    color: green;
+    font: bold italic 300% Marker Felt;
+
+}
+
+.left-table-item {
+    text-align: right;
+
+}
+
+.middle-table-item {
+    text-align: center;
+
+}
+
+.help-string {
+    text-align: left;
+    font: bold 75%  Bookman;
+}
+
+.link-in-favorite {
+    font: bold 100%  Bookman;
+}
+
+.foot-string: {
+    font: bold 100%  Bookman;
+    color:red;
+}
+
+.favorite-word {
+    font: bold 150%  Bookman;
+}
