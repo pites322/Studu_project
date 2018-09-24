@@ -1,52 +1,9 @@
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Golem</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    </head>
-    <body>
-        <h1>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-              <a class="navbar-brand" href="#">Explore</a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
+{% extends 'projectplace/base.html' %}
+{% load static %}
 
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                  <a class="navbar-brand" href="#">Start a project</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-                  <ul style= "padding-top: 12">
-                    <a class="navbar-brand" href="#">Sing in</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                  </ul>
-              </div>
-            </nav>
-            <h1 class="main-name">Golem</h1>
+{% block content %}
         </h1>
         <h1>
-            <table border="1" width="100%" cellpadding="15">
-                <tr>
-                    <td width="35%" class="left-table-item">Ячейка 1</td>
-                    <td class="middle-table-item">Ячейка 2</td>
-                    <td class="middle-table-item">Ячейка 2</td>
-                    <td width="35%">Ячейка 2</td>
-            </table>
-        </h1>
-        <h1 >
             <div class="col-sm-4" style= "padding-left: 20%">
                 <div style= "padding-top: 50"  class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
                   <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -59,13 +16,13 @@
                 </div>
             </div>
         </h1>
-         <h1 >
+         <h1>
            <div class="row">
              <div class="col-sm-4" style= "padding-left: 20%">
                 <table  width="200%" cellpadding="5" >
                 <tr>
                     <td><picture>
-                          <img src="https://xoxo.ru/wp-content/uploads/2017/08/fotograf-snimaet-primechatelnye-portrety-kotov-podcherkivayushhie-ix-lichnost-01.jpg"  class="rounded float-left" width="100%" alt="123">
+                          <img src="https://xoxo.ru/wp-content/uploads/2017/08/fotograf-snimaet-primechatelnye-portrety-kotov-podcherkivayushhie-ix-lichnost-0.jpg"  class="rounded float-left" width="100%" alt="123">
                           </picture>
                     </td>
                 </tr>
@@ -196,14 +153,14 @@
                         </a>
                     </td>
                 </tr>
-
             </table>
             </div>
         </h1>
-    </body>
+        </div>
     <footer>
         <h1 style="font: bold 100%  Bookman">
             I don't have eny idea now, maybe later
         </h1>
     </footer>
-</html>
+
+{% endblock %}
