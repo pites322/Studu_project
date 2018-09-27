@@ -16,8 +16,15 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from projectplace.views import PostNew
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('projectplace.urls')),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
+#    url(r'^profile/', Profile.as_view(), name='profile'),
+    url(r'^edit_post/(?P<pk>\d+)/', PostNew.as_view(), name='edit_post'),
+    url(r'^add_post/', PostNew.as_view(), name='add_post'),
+    url(r'', include('django.contrib.auth.urls')),
 ]
