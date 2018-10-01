@@ -1,43 +1,107 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.views.generic import TemplateView, FormView, ListView
+from .forms import AddPostForm
 from .models import Post
-from .forms import PostForm
-from django.shortcuts import redirect
-from django.views.generic import TemplateView, FormView
-from projectplace.forms import AddPostForm
+from django.conf import settings
+from django.utils import timezone
 #
 
-def title(request):
-    return render(request, 'projectplace/Title.html', {})
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+
+    def posts(self, request):
+        import stripe
+        stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
+
+        stripe.Charge.create(
+            amount=10000,
+            currency="usd",
+            source=request.POST['stripeToken'],  # obtained with Stripe.js
+            description="Test payment",
+            application_fee=100,
+            capture=False
+        )
+    return render(request, 'projectplace/post_detail.html', {'post': post})
 
 
-class PostNew(FormView):
-        # if request.method == "POST":
-        #     form = PostForm(request.POST)
-        #     if form.is_valid():
-        #         post = form.save(commit=False)
-        #         post.author = request.user
-        #         post.published_date = timezone.now()
-        #         post.save()
-        #         return redirect('post_detail', pk=post.pk)
-        # else:
-        #     form = PostForm()
-        # return render(request, 'projectplace/post_edit.html', {'form': form})
+class Title(ListView):
+    template_name = 'projectplace/Title.html'
+    model = Post
 
-        template_name = 'projectplace/post_edit.html'
-        form_class = AddPostForm
-        success_url = '/'
 
-        def get_form_kwargs(self):
-            form_kwargs = super(PostNew, self).get_form_kwargs()
-            if 'pk' in self.kwargs:
-                form_kwargs['instance'] = Post.objects.get(id=self.kwargs['pk'])
-            return form_kwargs
+class Art(ListView):
+    template_name = 'projectplace/Art.html'
+    model = Post
 
-        def form_valid(self, form):
+
+class Design(ListView):
+    template_name = 'projectplace/Design&Tech.html'
+    model = Post
+
+
+class Games(ListView):
+    template_name = 'projectplace/Games.html'
+    model = Post
+
+
+class Music(ListView):
+    template_name = 'projectplace/Music.html'
+    model = Post
+
+
+class Other(ListView):
+    template_name = 'projectplace/Other.html'
+    model = Post
+
+
+class HomeView(TemplateView):
+    template_name = 'projectplace/Title.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+        post = Post.objects.values().order_by('-created_at').first()
+#        context['posts'] = Post.objects.get_home_posts()
+
+        # if 'view_count' not in self.request.session:
+        #     self.request.session['view_count'] = 0
+        # self.request.session['view_count'] += 1
+        # self.request.session.save()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['some'] = 'value'
+        return self.render_to_response(context)
+
+
+
+def PostNew(request):
+
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
             post = form.save(commit=False)
-            post.owner = self.request.user
-            if post.is_published:
-                post.published_at = timezone.now()
+            post.author = request.user
+            post.created_at = timezone.now()
             post.save()
-            return super(PostNew, self).form_valid(form)
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = AddPostForm()
+    return render(request, 'projectplace/post_edit.html', {'form': form})
+
+
+
+
+class Profile(TemplateView):
+    template_name = 'projectplace/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs)
+        user_posts = Post.objects.filter(
+            author=self.request.user
+        )
+        context['posts'] = user_posts
+        return context
 

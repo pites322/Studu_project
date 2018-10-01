@@ -1,0 +1,27 @@
+{% extends 'projectplace/base.html' %}
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_4d82ss51WQYwuCciwz4i5ude"
+                data-amount="10000"
+                data-name="Sample Charge"
+                data-description="test"
+                data-currency="usd">
+        </script>
+    </form>
+    <div class="post">
+        {% if post.published_date %}
+            <div class="date">
+                {{ post.published_date }}
+            </div>
+        {% endif %}
+        <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+        <h1>{{ post.title }}</h1>
+        <h1>{{ post.author|linebreaksbr }}</h1>
+        <h1>{{ post.body|linebreaksbr }}</h1>
+        <h1>{{ post.value|linebreaksbr }}</h1>
+        <p><img src="{{ post.image|linebreaksbr }}"><</p>
+    </div>
+{% endblock %}

@@ -16,15 +16,26 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from projectplace.views import PostNew
+from projectplace.views import PostNew, Profile
 from django.conf import settings
+
+# from api.views import PostViewSet
+# router = routers.DefaultRouter()
+# router.register(r'posts', PostViewSet)
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('projectplace.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-#    url(r'^profile/', Profile.as_view(), name='profile'),
-    url(r'^edit_post/(?P<pk>\d+)/', PostNew.as_view(), name='edit_post'),
-    url(r'^add_post/', PostNew.as_view(), name='add_post'),
-    url(r'', include('django.contrib.auth.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^accounts/profile/', Profile.as_view(), name='profile'),
+    url(r'^api-auth/', include('rest_framework.urls'))
+#    url(r'^edit_post/(?P<pk>\d+)/', PostNew, name='edit_post'),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
