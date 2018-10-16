@@ -1,59 +1,29 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
 from django.views.generic import TemplateView, FormView, ListView
 from .forms import AddPostForm
 from .models import Post
 from django.conf import settings
 from django.utils import timezone
-#
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-
-    def posts(self, request):
-        import stripe
-        stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
-
-        stripe.Charge.create(
-            amount=10000,
-            currency="usd",
-            source=request.POST['stripeToken'],  # obtained with Stripe.js
-            description="Test payment",
-            application_fee=100,
-            capture=False
-        )
-    return render(request, 'projectplace/post_detail.html', {'post': post})
-
-
-class Title(ListView):
-    template_name = 'projectplace/Title.html'
-    model = Post
-
-
-class Art(ListView):
-    template_name = 'projectplace/Art.html'
-    model = Post
-
-
-class Design(ListView):
-    template_name = 'projectplace/Design&Tech.html'
-    model = Post
-
-
-class Games(ListView):
-    template_name = 'projectplace/Games.html'
-    model = Post
-
-
-class Music(ListView):
-    template_name = 'projectplace/Music.html'
-    model = Post
-
-
-class Other(ListView):
-    template_name = 'projectplace/Other.html'
-    model = Post
+    if post.author == request.user:
+        form = AddPostForm(instance=post)
+        return render(request, 'projectplace/post_edit.html', {'form': form})
+    else:
+        def posts(self, request):
+            import stripe
+            stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
+            stripe.Charge.create(
+                amount=10000,
+                currency="usd",
+                source=request.POST['stripeToken'],  # obtained with Stripe.js
+                description="Test payment",
+                application_fee=100,
+                capture=False
+            )
+        return render(request, 'projectplace/post_detail.html', {'post': post})
 
 
 class HomeView(TemplateView):
@@ -61,20 +31,13 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        post = Post.objects.values().order_by('-created_at').first()
-#        context['posts'] = Post.objects.get_home_posts()
-
-        # if 'view_count' not in self.request.session:
-        #     self.request.session['view_count'] = 0
-        # self.request.session['view_count'] += 1
-        # self.request.session.save()
+        context['Posts'] = Post.objects.order_by('-created_at')
+        # context['Art'] = Post.objects.filter(category="art").order_by('-created_at')
+        # context['Design'] = Post.objects.filter(category="design").order_by('-created_at')
+        # context['Games'] = Post.objects.filter(category="games").order_by('-created_at')
+        # context['Music'] = Post.objects.filter(category="music").order_by('-created_at')
+        # context['Other'] = Post.objects.filter(category="other").order_by('-created_at')
         return context
-
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
-        context['some'] = 'value'
-        return self.render_to_response(context)
-
 
 
 def PostNew(request):
@@ -92,8 +55,6 @@ def PostNew(request):
     return render(request, 'projectplace/post_edit.html', {'form': form})
 
 
-
-
 class Profile(TemplateView):
     template_name = 'projectplace/profile.html'
 
@@ -104,4 +65,16 @@ class Profile(TemplateView):
         )
         context['posts'] = user_posts
         return context
+
+
+    # def stripe_connect(self, **kwargs):
+    #     profile = get_object_or_404(Profile, pk=pk)
+    #     import stripe
+    #     stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
+    #
+    #     acct = stripe.Account.create(
+    #         country="US",
+    #         type="custom"
+    #     )
+    #     return render(request, 'projectplace/post_detail.html', {'post': post})
 
