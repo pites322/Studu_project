@@ -13,4 +13,10 @@
         <br>
         {% endfor %}
         </div>
+          <div style="font-size: 30px;">You data:</div>
+                <li style="font-size: 18px;">{{ extradata.get.first_name }}</li>
+                <li style="font-size: 18px;">{{ extradata.get.last_name}} </li>
+                <li style="font-size: 18px;">{{ stripe.get.stripe_account }}</li>
+<button type="submit" class="save btn btn-default"><a href="{% url 'imp_extradata' %}">Change</a></button>
+
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 CATEGORY_CHOICES = (
@@ -29,4 +30,6 @@ class Post(models.Model):
         return self.title
 
 
-#
+class UserConnect(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    stripe_account = models.CharField(max_length=100, default='None_imput')

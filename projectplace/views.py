@@ -1,15 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, FormView, ListView
-from .forms import AddPostForm
-from .models import Post
+from .forms import AddPostForm, AddUserStripe, AddUserExtradata
+from .models import Post, UserConnect
+from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
+from functools import wraps
+import json
 
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if post.author == request.user:
-        form = AddPostForm(instance=post)
+        if request.method == "POST":
+            form = AddPostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.created_at = timezone.now()
+                post.save()
+                return redirect('/accounts/profile/', pk=post.pk)
+        else:
+            form = AddPostForm(instance=post)
         return render(request, 'projectplace/post_edit.html', {'form': form})
     else:
         def posts(self, request):
@@ -41,7 +53,6 @@ class HomeView(TemplateView):
 
 
 def PostNew(request):
-
     if request.method == "POST":
         form = AddPostForm(request.POST)
         if form.is_valid():
@@ -63,18 +74,40 @@ class Profile(TemplateView):
         user_posts = Post.objects.filter(
             author=self.request.user
         )
+        user_stripe = UserConnect.objects.filter(user_id=self.request.user.pk)
+        name_first_last = User.objects.filter(username=self.request.user)
         context['posts'] = user_posts
+        context['stripe'] = user_stripe
+        context['extradata'] = name_first_last
         return context
 
 
-    # def stripe_connect(self, **kwargs):
-    #     profile = get_object_or_404(Profile, pk=pk)
-    #     import stripe
-    #     stripe.api_key = "sk_test_KoPBXsif8wO9pa9GPKU9qsz6"
-    #
-    #     acct = stripe.Account.create(
-    #         country="US",
-    #         type="custom"
-    #     )
-    #     return render(request, 'projectplace/post_detail.html', {'post': post})
+def user_mod(request,  *args, **kwargs):
+    user_stripe = get_object_or_404(UserConnect, user_id=request.user.pk)
+    user_first_sec_name = get_object_or_404(User, username=request.user)
+    name_first_last = User.objects.filter(username=request.user)
+    if request.method == "POST":
+        # body_unicode = response.body.decode('utf-8')
+        # body = json.loads(body_unicode)
+        # print(body)
+        form1 = AddUserStripe(request.POST, instance=user_stripe)
+        form2 = AddUserExtradata(request.POST, instance=user_first_sec_name)
+        if form1.is_valid() and form2.is_valid():
+            user_id = request.user.pk
+            sripe = form1.save(commit=False)
+            first_last_name = form2.save(commit=False)
+            sripe.save()
+            first_last_name.save()
+            return redirect('/accounts/profile/')
+    else:
+        form1 = AddUserStripe(request.POST, instance=user_stripe)
+        form2 = AddUserExtradata(request.POST, instance=user_first_sec_name)
+        user_id = request.user.pk
+    return render(request, 'projectplace/account_extradata.html', {'form1': form1, 'form2': form2, 'stripe': user_stripe, "user": name_first_last})
+
+
+# def json_reader(request):
+#     response = request.get("https://dashboard.stripe.com/oauth/authorize?response_type=code&client_id=ca_DhClBiSS69lYQZkAo1yevWDDjWOYhjYB&scope=read_write")
+#     json_data = json.loads(response.text)
+#     print(json_data)
 

@@ -19,19 +19,14 @@ from django.contrib import admin
 from projectplace.views import PostNew, Profile
 from django.conf import settings
 
-# from api.views import PostViewSet
-# router = routers.DefaultRouter()
-# router.register(r'posts', PostViewSet)
-
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls, name='admin'),
+    url(r'^accounts/profile/', Profile.as_view(), name='profile'),
     url(r'', include('projectplace.urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^accounts/profile/', Profile.as_view(), name='profile'),
     url(r'^api-auth/', include('rest_framework.urls'))
-#    url(r'^edit_post/(?P<pk>\d+)/', PostNew, name='edit_post'),
 ]
 
 if settings.DEBUG:

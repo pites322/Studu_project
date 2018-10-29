@@ -44,6 +44,9 @@
               </li>
 
                 {% elif not user.is_authenticated %}
+                <li class="nav-item active">
+                <a class="nav-link" href="/admin/" style="font-size: 20px">Admin</a>
+              </li>
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'registration_register' %}" style="font-size: 20px">Registration</a>
               </li>

@@ -1,0 +1,20 @@
+{% extends 'projectplace/base.html' %}
+{% load bootstrap %}
+
+{% block content %}
+
+
+    <h1>Add extradata</h1>
+    <button class="btn btn-default"><a href="./read_json/" >bla</a></button>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form1.as_p }}
+        <div>you stripe account: {{ stripe.stripe_account }}</div><br>
+        {{ form2.as_p }}
+        <div>you current first name: {{ user.get.first_name }}</div><br>
+        <div>you current last name: {{ user.get.last_name }}</div><br>
+        <button class="btn btn-default"><a href="https://dashboard.stripe.com/oauth/authorize?response_type=code&client_id=ca_DhClBiSS69lYQZkAo1yevWDDjWOYhjYB&scope=read_write">Connect you stripe</a></button>
+        <button type="submit" class="save btn btn-default">Save</button>
+    </form>
+
+
+{% endblock %}
